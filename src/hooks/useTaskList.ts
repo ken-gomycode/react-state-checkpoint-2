@@ -6,7 +6,10 @@ const useTaskList = () => {
   const [tasks, setTasks] = useState<Task[]>(mockTasks);
 
   const sortedTasks = useMemo(() => {
-    return tasks.sort((a, b) => {
+    // sort tasks by title
+    const sortedByTitle = tasks.sort((a, b) => a.title.localeCompare(b.title));
+
+    return sortedByTitle.sort((a, b) => {
       // completed tasks should be at the bottom
       if (a.completed && !b.completed) return 1;
       if (!a.completed && b.completed) return -1;
@@ -25,6 +28,17 @@ const useTaskList = () => {
     setTasks(updatedTasks);
   }, [tasks]);
 
+  const updateTask = useCallback((id: string, updatedTask: Task) => {
+    const updatedTasks = tasks.map(task => {
+      // update task based on id
+      if (task.id === id) {
+        return {...task, ...updatedTask};
+      }
+      return task;
+    });
+    setTasks(updatedTasks);
+  }, [tasks]);
+
   const deleteTask = useCallback((id: string) => {
     // delete task based on id by filtering out the task
     const updatedTasks = tasks.filter(task => task.id !== id);
@@ -34,6 +48,7 @@ const useTaskList = () => {
   return {
     tasks: sortedTasks,
     toggleTaskCompleted,
+    updateTask,
     deleteTask,
   }
 }
