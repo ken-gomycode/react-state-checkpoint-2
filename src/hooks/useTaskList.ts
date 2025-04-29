@@ -17,6 +17,11 @@ const useTaskList = () => {
     });
   }, [tasks]);
 
+  const addTask = useCallback((newTask: Task) => {
+    // add new task to the list
+    setTasks(prevTasks => [...prevTasks, newTask]);
+  }, []);
+
   const toggleTaskCompleted = useCallback((id: string) => {
     const updatedTasks = tasks.map(task => {
       // toggle task completed based on id
@@ -47,6 +52,7 @@ const useTaskList = () => {
 
   return {
     tasks: sortedTasks,
+    addTask,
     toggleTaskCompleted,
     updateTask,
     deleteTask,
