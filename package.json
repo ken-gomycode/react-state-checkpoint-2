@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://ken-gomycode.github.io/react-state-checkpoint-2",
+  "homepage": "https://react-state-checkpoint-2.onrender.com",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
