@@ -1,5 +1,6 @@
 import {useCallback, useMemo, useState} from "react";
 import {AddEditTaskPayload, Task} from "../types";
+import {capitalizeSentence} from "../utils/strings.ts";
 
 const useTaskList = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -18,8 +19,9 @@ const useTaskList = () => {
 
   const addTask = useCallback((newTask: AddEditTaskPayload) => {
     const taskToAdd = {
-      ...newTask,
       id: crypto.randomUUID(),
+      title: capitalizeSentence(newTask.title),
+      description: capitalizeSentence(newTask.description),
       completed: false,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -42,7 +44,10 @@ const useTaskList = () => {
     const updatedTasks = tasks.map(task => {
       // update task based on id
       if (task.id === id) {
-        return {...task, ...updatedTask};
+        const taskToUpdate = {...task, ...updatedTask};
+        taskToUpdate.title = capitalizeSentence(taskToUpdate.title);
+        taskToUpdate.description = capitalizeSentence(taskToUpdate.description);
+        return taskToUpdate;
       }
       return task;
     });
