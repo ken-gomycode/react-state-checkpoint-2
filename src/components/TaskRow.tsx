@@ -5,9 +5,10 @@ type Props = {
   task: Task,
   toggleCompleted: (id: string) => void,
   deleteTask: (id: string) => void,
+  editTask: (task: Task) => void,
 }
 
-const TaskRow: FC<Props> = ({ task, toggleCompleted, deleteTask }) => {
+const TaskRow: FC<Props> = ({ task, toggleCompleted, editTask, deleteTask }) => {
   return (
     <div className="flex justify-between items-center border-b border-gray-200 py-4">
       <div className="flex items-center">
@@ -17,7 +18,7 @@ const TaskRow: FC<Props> = ({ task, toggleCompleted, deleteTask }) => {
           checked={task.completed}
           onChange={() => toggleCompleted(task.id)}
         />
-        <div className="text-left">
+        <div className="text-left" onClick={() => editTask(task)}>
           <p className={`text-lg ${task.completed ? "line-through text-gray-400" : ""}`}>
             {task.title}
           </p>

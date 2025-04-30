@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import {AddEditTaskPayload, Task} from "../types";
 import ActionButton from "./ActionButton.tsx";
 
@@ -19,6 +19,16 @@ const TaskModalForm = ({ isOpen, onClose, onSubmit, task }: TaskModalFormProps) 
     setDescription("");
   };
 
+  useEffect(() => {
+    if (task) {
+      setTitle(task.title);
+      setDescription(task.description);
+    } else {
+      setTitle("");
+      setDescription("");
+    }
+  }, [task]);
+
   if (!isOpen) return null;
 
   return (
@@ -33,7 +43,7 @@ const TaskModalForm = ({ isOpen, onClose, onSubmit, task }: TaskModalFormProps) 
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full border border-gray-300 rounded px-3 py-2"
+            className="w-full border border-gray-300 rounded px-3 py-3"
             placeholder="Enter task title"
           />
         </div>

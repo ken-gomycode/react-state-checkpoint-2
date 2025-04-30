@@ -34,11 +34,17 @@ const TasksWrapper = () => {
     toggleTaskModal();
   }
 
+  const handleEditTask = (task: Task) => {
+    setSelectedTask(task);
+    toggleTaskModal();
+  }
+
   const taskRows = tasks.map((task, index) => (
     <TaskRow
       key={index}
       task={task}
       toggleCompleted={toggleTaskCompleted}
+      editTask={handleEditTask}
       deleteTask={deleteTask}
     />
   ));
