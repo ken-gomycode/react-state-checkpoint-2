@@ -2,8 +2,17 @@ import {useCallback, useMemo, useState} from "react";
 import {AddEditTaskPayload, Task} from "../types";
 import {capitalizeSentence} from "../utils/strings.ts";
 
+const initTasksFromSessionStorage = () => {
+  const tasks = sessionStorage.getItem('tasks');
+  return tasks ? JSON.parse(tasks) : [];
+}
+
+const saveTasksToSessionStorage = (tasks: Task[]) => {
+  sessionStorage.setItem('tasks', JSON.stringify(tasks));
+}
+
 const useTaskList = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<Task[]>(initTasksFromSessionStorage());
 
   const sortedTasks = useMemo(() => {
     // sort tasks by title
@@ -27,7 +36,8 @@ const useTaskList = () => {
       updatedAt: new Date(),
     }
     setTasks(prevTasks => [...prevTasks, taskToAdd]);
-  }, []);
+    saveTasksToSessionStorage([...tasks, taskToAdd]);
+  }, [tasks]);
 
   const toggleTaskCompleted = useCallback((id: string) => {
     const updatedTasks = tasks.map(task => {
@@ -38,6 +48,7 @@ const useTaskList = () => {
       return task;
     });
     setTasks(updatedTasks);
+    saveTasksToSessionStorage(updatedTasks);
   }, [tasks]);
 
   const updateTask = useCallback((id: string, updatedTask: AddEditTaskPayload) => {
@@ -52,12 +63,14 @@ const useTaskList = () => {
       return task;
     });
     setTasks(updatedTasks);
+    saveTasksToSessionStorage(updatedTasks);
   }, [tasks]);
 
   const deleteTask = useCallback((id: string) => {
     // delete task based on id by filtering out the task
     const updatedTasks = tasks.filter(task => task.id !== id);
     setTasks(updatedTasks);
+    saveTasksToSessionStorage(updatedTasks);
   }, [tasks]);
 
   return {
