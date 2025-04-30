@@ -6,3 +6,5 @@ export type Task = {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export type AddEditTaskPayload = Pick<Task, "title" | "description">

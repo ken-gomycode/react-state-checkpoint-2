@@ -1,9 +1,8 @@
 import {useCallback, useMemo, useState} from "react";
-import {Task} from "../types";
-import {mockTasks} from "../data/mock.ts";
+import {AddEditTaskPayload, Task} from "../types";
 
 const useTaskList = () => {
-  const [tasks, setTasks] = useState<Task[]>(mockTasks);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   const sortedTasks = useMemo(() => {
     // sort tasks by title
@@ -17,9 +16,15 @@ const useTaskList = () => {
     });
   }, [tasks]);
 
-  const addTask = useCallback((newTask: Task) => {
-    // add new task to the list
-    setTasks(prevTasks => [...prevTasks, newTask]);
+  const addTask = useCallback((newTask: AddEditTaskPayload) => {
+    const taskToAdd = {
+      ...newTask,
+      id: crypto.randomUUID(),
+      completed: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
+    setTasks(prevTasks => [...prevTasks, taskToAdd]);
   }, []);
 
   const toggleTaskCompleted = useCallback((id: string) => {
@@ -33,7 +38,7 @@ const useTaskList = () => {
     setTasks(updatedTasks);
   }, [tasks]);
 
-  const updateTask = useCallback((id: string, updatedTask: Task) => {
+  const updateTask = useCallback((id: string, updatedTask: AddEditTaskPayload) => {
     const updatedTasks = tasks.map(task => {
       // update task based on id
       if (task.id === id) {
