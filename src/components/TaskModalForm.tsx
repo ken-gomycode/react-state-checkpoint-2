@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {AddEditTaskPayload, Task} from "../types";
 import ActionButton from "./ActionButton.tsx";
 
@@ -18,6 +18,10 @@ const TaskModalForm = ({ isOpen, onClose, onSubmit, task }: TaskModalFormProps) 
     setTitle("");
     setDescription("");
   };
+
+  const allowSubmit = useMemo(() => {
+    return title.length > 0 && title.length <= 50 && description.length <= 200;
+  }, [title, description]);
 
   useEffect(() => {
     if (task) {
@@ -48,19 +52,19 @@ const TaskModalForm = ({ isOpen, onClose, onSubmit, task }: TaskModalFormProps) 
           />
         </div>
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-1 text-left block pb-1">Description</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1 text-left block pb-1">Description (Optional)</label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             className="w-full border border-gray-300 rounded px-3 py-2"
             placeholder="Enter task description"
-            rows={4}
+            rows={8}
           />
         </div>
 
         <div className="flex justify-between items-center" >
           <button onClick={onClose} >Cancel</button>
-          <ActionButton onClick={handleSubmit} label={'Continue'} />
+          <ActionButton disabled={!allowSubmit} onClick={handleSubmit} label={'Continue'} />
         </div>
       </div>
     </div>
